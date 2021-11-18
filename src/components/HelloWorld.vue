@@ -1,11 +1,22 @@
 <template>
         <section class="main">
-            <form class="search" method="post" action="index.html" >
+          <div class="d-flex justify-content-around">
+            <div>
+              <form class="search" method="post" action="index.html" >
                 <input v-model="name" id="search" type="text" name="q" @input="getSuggestion" placeholder="Search..." autocomplete="off" />
                 <ul class="results">
                     <li v-for="(match, index) in bestMatches" :key="index" @click="getDesc(match['1. symbol'])"> {{ match['1. symbol'] }} <br /></li>
                 </ul>
             </form>
+            </div>
+            <div>
+                 <button type="button" class="btn btn-primary">Add</button>
+            </div>
+            <div>
+              
+            </div>
+          </div>
+            
         </section>
         <p>{{ description }}</p>
       
@@ -26,7 +37,6 @@ import VueApexCharts from 'vue-apexcharts'
 export default {
   name: 'HelloWorld',
   components: {
-      Chart,
       VueApexCharts
     },
   props: {
@@ -55,13 +65,14 @@ export default {
   
   methods: {
         getSuggestion() {
+          if(this.name.length>2){
             axios.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' + this.name + '&apikey=1L0K210ONUBKP1KR')
             .then((data) => {
                 console.log(data);
                 this.bestMatches = data.data['bestMatches'];
                 console.log(this.bestMatches);
-
             });
+            }
         },
         getDesc(e){
           axios.get('https://www.alphavantage.co/query?function=OVERVIEW&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
@@ -70,11 +81,11 @@ export default {
                 this.description = data.data['Description'];
                 console.log(this.description);
                  this.b=true
-                this.add();
+                this.add(e);
             });
         },
-        add() {
-           axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + this.name + '&apikey=1L0K210ONUBKP1KR')
+        add(e) {
+           axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
            .then((data) => {
               this.options.xaxis.categories = []
               //let keys=(Object.keys(data.data["Monthly Time Series"]))
