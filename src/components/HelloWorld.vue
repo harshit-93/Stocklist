@@ -113,34 +113,52 @@ export default {
                 this.stock.avgPrice=data.data["Monthly Time Series"][Object.keys(data.data["Monthly Time Series"])[0]]["4. close"]
             })
             .catch((error)=>{
-                console.log(error);
+                console.log("API limit");
             });
 },
      addtowallet(){
        if(localStorage.wallet) {
-         let wallet=JSON.parse(localStorage.wallet)
+       let wallet=JSON.parse(localStorage.wallet)
          console.log(wallet)
-         if(this.stock.key in wallet) {
-           wallet[this.stock.key].avgPrice = ((wallet[this.stock.key].avgPrice*wallet[this.stock.key].Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+wallet[this.stock.key].Quantity)
-           wallet[this.stock.key].Quantity += this.stock.Quantity;
-         } else {
-           wallet[this.stock.key].Quantity = this.stock.Quantity;
-           wallet[this.stock.key].avgPrice=this.stock.avgPrice
-         }
+        let updateStatus = wallet.filter((stock) => {
+          if(stock.name == this.stock.key) {
+            stock.avgPrice = ((stock.avgPrice*stock.Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+stock.Quantity)
+            stock.Quantity += this.stock.Quantity;
+            console.log("VALUE UPDATED");
+            return true;
+          }
+        })
+
+        if(updateStatus.length == 0) {
+          console.log(updateStatus);
+          wallet.push({
+           name: this.stock.key,
+           Quantity: this.stock.Quantity,
+           avgPrice: this.stock.avgPrice
+         });
+        }
+        //  if(this.stock.key in wallet) {
+        //    wallet[this.stock.key].avgPrice = ((wallet[this.stock.key].avgPrice*wallet[this.stock.key].Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+wallet[this.stock.key].Quantity)
+        //    wallet[this.stock.key].Quantity += this.stock.Quantity;
+        //  } else {
+        //    wallet[this.stock.key].Quantity = this.stock.Quantity;
+        //    wallet[this.stock.key].avgPrice=this.stock.avgPrice
+        //  }
          console.log(wallet);
          localStorage.wallet = JSON.stringify(wallet)
        } else {
-         let json = {};
-         json[this.stock.key] = {
+         let arr = [];
+         arr.push({
+           name: this.stock.key,
            Quantity: this.stock.Quantity,
            avgPrice: this.stock.avgPrice
-         }
+         });
         //  json['wallet'].push({
         //    name: this.stock.key,
         //    quantity: this.stock.Quantity,
         //    avgPrice: this.stock.avgPrice
         //  })
-         localStorage.wallet = JSON.stringify(json)
+         localStorage.setItem("wallet", JSON.stringify(arr));
        }
      }
     }

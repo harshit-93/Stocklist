@@ -9,10 +9,10 @@
   </thead>
   <tbody>
     <tr v-for="(stock,index) in stocklist" v-bind:key="index">
-      <td>{{index}}</td>
+      <td>{{stock.name}}</td>
       <td>{{stock.Quantity}}</td>
-      <td>  <input type="number" v-model="qty">
-        <a class="pl-5" @click="sell(index)">Sell</a> </td>
+      <td>  <input type="number" @change="mainlist" >
+        <a class="pl-5" @click="sell(stock.name)">Sell</a> </td>
     </tr>
   </tbody>
 </table>
@@ -21,7 +21,7 @@
      export default {
   data() {
     return {
-      stocklist:{},
+      stocklist:[],
       qty:""
   }
   },
@@ -31,23 +31,48 @@
        this.stocklist=JSON.parse(localStorage.wallet)
      }
   },
-  // watch:{
-  //    stocklist(stocklist)
-  //    {
-  //      localStorage.wallet=JSON.stringify(stocklist)
-  //      console.log('j');
-  //    }
-  // },
+  watch:{
+     stocklist:
+     { deep:true,
+     handler(st){
+       localStorage.wallet=JSON.stringify(st)
+       console.log('j');
+       }
+     }
+  },
   methods:{
     sell(e){
-       this.stocklist[e].Quantity-=this.qty
+       const a = this.stocklist.filter((stock)=>stock.name==e)
+       console.log(a)
+       a.forEach(stock => {
+         if(stock.name==e)
+         {
+           stock.Quantity-=this.qty
+         }
+       if(stock.Quantity<=0)
+       { 
+         let a = this.stocklist.findIndex((stock => {
+           return stock.name == e;
+         }))
+         this.stocklist.splice(a,1)
+        localStorage.wallet=JSON.stringify(this.stocklist)
+        }
+       })
       //  console.log(e);
       //  console.log(this.stocklist)
-     // localStorage.wallet=JSON.stringify(this.stocklist)
-      if(this.stocklist[e].Quantity<=0)
-        delete this.stocklist[e]
-        localStorage.wallet=JSON.stringify(this.stocklist)
-        localStorage.removeItem('wallet');
+      //localStorage.wallet=JSON.stringify(this.stocklist)
+      // if(this.stocklist[e].Quantity<=0)
+      //  { delete this.stocklist[e]
+      //   localStorage.wallet=JSON.stringify(this.stocklist)
+      //   localStorage.removeItem('wallet')
+      //   }
+
+        // if(localStorage.wallet == "{}") {
+        //   localStorage.removeItem('wallet')
+        // }
+    },
+    mainlist(event){
+      this.qty=event.target.value
     }
   }
   }
