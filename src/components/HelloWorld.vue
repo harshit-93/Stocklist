@@ -75,6 +75,9 @@ export default {
                 console.log(data);
                 this.bestMatches = data.data['bestMatches'];
                 console.log(this.bestMatches);
+            })
+            .catch((error)=>{
+                console.log(error);
             });
             }
         },
@@ -87,6 +90,9 @@ export default {
                  this.b=true
                 this.add(e);
                 this.stock.key=e
+            })
+            .catch((error)=>{
+                console.log(error);
             });
         },
         add(e) {
@@ -105,6 +111,9 @@ export default {
                    this.series[0].data.push(data.data["Monthly Time Series"][a]["1. open"])
                 }
                 this.stock.avgPrice=data.data["Monthly Time Series"][Object.keys(data.data["Monthly Time Series"])[0]]["4. close"]
+            })
+            .catch((error)=>{
+                console.log(error);
             });
 },
      addtowallet(){
