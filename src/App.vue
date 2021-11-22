@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-
-
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid text-centre">
     <div class="collapse navbar-collapse" id="navbarNav" style="place-content: center;">
@@ -21,10 +18,6 @@
     </div>
   </div>
 </nav>
-
-
-
-
     <router-view />
   </div>
 </template>
@@ -40,7 +33,7 @@ export default {
     name: "App",
     components: {
       HelloWorld,
-        Wallet,
+        Wallet
     }
   }
 </script>

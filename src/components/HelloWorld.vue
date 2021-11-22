@@ -9,11 +9,9 @@
                 </ul>
             </form>
             </div>
+            <div><input type="number" min="1" v-model="stock.Quantity"></div> 
             <div>
-                 <button type="button" class="btn btn-primary">Add</button>
-            </div>
-            <div>
-              
+                 <button type="button" class="btn btn-secondary" @click="addtowallet">Add</button>
             </div>
           </div>
             
@@ -40,7 +38,7 @@ export default {
       VueApexCharts
     },
   props: {
-    msg: String
+   // msg: String
   },
   data() {
     return {
@@ -48,6 +46,12 @@ export default {
       description: "",
       name: "",
       b: false,
+      stock:
+      {
+        key:'',
+        Quantity:'',
+        avgPrice: ''
+      },
       options: {
         chart: {
           id: 'vuechart-example'
@@ -82,6 +86,7 @@ export default {
                 console.log(this.description);
                  this.b=true
                 this.add(e);
+                this.stock.key=e
             });
         },
         add(e) {
@@ -99,11 +104,36 @@ export default {
                 {
                    this.series[0].data.push(data.data["Monthly Time Series"][a]["1. open"])
                 }
-                
+                this.stock.avgPrice=data.data["Monthly Time Series"][Object.keys(data.data["Monthly Time Series"])[0]]["4. close"]
             });
-
-    // this.doughnutChart.update();
-}
+},
+     addtowallet(){
+       if(localStorage.wallet) {
+         let wallet=JSON.parse(localStorage.wallet)
+         console.log(wallet)
+         if(this.stock.key in wallet) {
+           wallet[this.stock.key].avgPrice = ((wallet[this.stock.key].avgPrice*wallet[this.stock.key].Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+wallet[this.stock.key].Quantity)
+           wallet[this.stock.key].Quantity += this.stock.Quantity;
+         } else {
+           wallet[this.stock.key].Quantity = this.stock.Quantity;
+           wallet[this.stock.key].avgPrice=this.stock.avgPrice
+         }
+         console.log(wallet);
+         localStorage.wallet = JSON.stringify(wallet)
+       } else {
+         let json = {};
+         json[this.stock.key] = {
+           Quantity: this.stock.Quantity,
+           avgPrice: this.stock.avgPrice
+         }
+        //  json['wallet'].push({
+        //    name: this.stock.key,
+        //    quantity: this.stock.Quantity,
+        //    avgPrice: this.stock.avgPrice
+        //  })
+         localStorage.wallet = JSON.stringify(json)
+       }
+     }
     }
 }
 </script>
