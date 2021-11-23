@@ -21,58 +21,36 @@
      export default {
   data() {
     return {
-      stocklist:[],
-      qty:""
+      stock:{}
   }
   },
-  mounted(){
+  // watch:{
+  //    stocklist:
+  //    { deep:true,
+  //      handler(st){
+  //      localStorage.wallet=JSON.stringify(st)
+  //      console.log('j');
+  //      }
+  //    }
+  // },
+   mounted(){
      if(localStorage.wallet)
      {
-       this.stocklist=JSON.parse(localStorage.wallet)
+       this.$store.state.wallet = JSON.parse(localStorage.wallet)
      }
   },
-  watch:{
-     stocklist:
-     { deep:true,
-     handler(st){
-       localStorage.wallet=JSON.stringify(st)
-       console.log('j');
-       }
-     }
+  computed:{
+    stocklist(){
+      return this.$store.state.wallet
+    }
   },
   methods:{
     sell(e){
-       const a = this.stocklist.filter((stock)=>stock.name==e)
-       console.log(a)
-       a.forEach(stock => {
-         if(stock.name==e)
-         {
-           stock.Quantity-=this.qty
-         }
-       if(stock.Quantity<=0)
-       { 
-         let a = this.stocklist.findIndex((stock => {
-           return stock.name == e;
-         }))
-         this.stocklist.splice(a,1)
-        localStorage.wallet=JSON.stringify(this.stocklist)
-        }
-       })
-      //  console.log(e);
-      //  console.log(this.stocklist)
-      //localStorage.wallet=JSON.stringify(this.stocklist)
-      // if(this.stocklist[e].Quantity<=0)
-      //  { delete this.stocklist[e]
-      //   localStorage.wallet=JSON.stringify(this.stocklist)
-      //   localStorage.removeItem('wallet')
-      //   }
-
-        // if(localStorage.wallet == "{}") {
-        //   localStorage.removeItem('wallet')
-        // }
+          this.stock.name=e
+          this.$store.dispatch('sell',this.stock)
     },
     mainlist(event){
-      this.qty=event.target.value
+      this.stock.qty=event.target.value
     }
   }
   }

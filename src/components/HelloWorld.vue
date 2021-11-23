@@ -90,6 +90,7 @@ export default {
                  this.b=true
                 this.add(e);
                 this.stock.key=e
+
             })
             .catch((error)=>{
                 console.log(error);
@@ -104,6 +105,7 @@ export default {
               // {
               //   console.log(Element)
               // })
+              this.stock.key=e
               this.options.xaxis.categories.push(Object.keys(data.data["Monthly Time Series"]))
               this.series[0].data = []
                for (let a of (Object.keys(data.data["Monthly Time Series"]) ))
@@ -117,49 +119,7 @@ export default {
             });
 },
      addtowallet(){
-       if(localStorage.wallet) {
-       let wallet=JSON.parse(localStorage.wallet)
-         console.log(wallet)
-        let updateStatus = wallet.filter((stock) => {
-          if(stock.name == this.stock.key) {
-            stock.avgPrice = ((stock.avgPrice*stock.Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+stock.Quantity)
-            stock.Quantity += this.stock.Quantity;
-            console.log("VALUE UPDATED");
-            return true;
-          }
-        })
-
-        if(updateStatus.length == 0) {
-          console.log(updateStatus);
-          wallet.push({
-           name: this.stock.key,
-           Quantity: this.stock.Quantity,
-           avgPrice: this.stock.avgPrice
-         });
-        }
-        //  if(this.stock.key in wallet) {
-        //    wallet[this.stock.key].avgPrice = ((wallet[this.stock.key].avgPrice*wallet[this.stock.key].Quantity)+(this.stock.Quantity*this.stock.avgPrice))/(this.stock.Quantity+wallet[this.stock.key].Quantity)
-        //    wallet[this.stock.key].Quantity += this.stock.Quantity;
-        //  } else {
-        //    wallet[this.stock.key].Quantity = this.stock.Quantity;
-        //    wallet[this.stock.key].avgPrice=this.stock.avgPrice
-        //  }
-         console.log(wallet);
-         localStorage.wallet = JSON.stringify(wallet)
-       } else {
-         let arr = [];
-         arr.push({
-           name: this.stock.key,
-           Quantity: this.stock.Quantity,
-           avgPrice: this.stock.avgPrice
-         });
-        //  json['wallet'].push({
-        //    name: this.stock.key,
-        //    quantity: this.stock.Quantity,
-        //    avgPrice: this.stock.avgPrice
-        //  })
-         localStorage.setItem("wallet", JSON.stringify(arr));
-       }
+        this.$store.dispatch('addtowallet',this.stock)
      }
     }
 }
