@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="(stock,index) in stocklist" v-bind:key="index">
+    <tr v-for="(stock,index) in wallet" v-bind:key="index">
       <td>{{stock.name}}</td>
       <td>{{stock.Quantity}}</td>
       <td>  <input type="number" @change="mainlist" >
@@ -18,6 +18,7 @@
 </table>
 </template>
 <script>
+import {mapState} from 'vuex'
      export default {
   data() {
     return {
@@ -40,9 +41,9 @@
      }
   },
   computed:{
-    stocklist(){
-      return this.$store.state.wallet
-    }
+   ...mapState([
+      'wallet'
+   ])
   },
   methods:{
     sell(e){

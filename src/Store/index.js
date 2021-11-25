@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     //stock:{},
+    amount: 10000,
     wallet:[]
   },
   mutations: {
@@ -15,6 +16,7 @@ export default createStore({
            stock.avgPrice = ((stock.avgPrice*stock.Quantity)+(st.Quantity*st.avgPrice))/(st.Quantity+stock.Quantity)
            stock.Quantity += st.Quantity;
            console.log("VALUE UPDATED");
+           context.state.amount-=(st.avgPrice*st.Quantity)
            return true;
          }
        })
@@ -25,10 +27,16 @@ export default createStore({
           Quantity: st.Quantity,
           avgPrice: st.avgPrice
         });
+        context.state.amount-=(st.avgPrice*st.Quantity)
        }
+      // context.state.amount-=st.avgPrice
         console.log(wallet);
         context.state.wallet=wallet
-        localStorage.wallet=JSON.stringify(context.state.wallet)
+        // localStorage.wallet=JSON.stringify(context.state.wallet)
+        
+       localStorage.setItem('amount', context.state.amount)
+        localStorage.setItem('wallet', JSON.stringify(context.state.wallet))
+       // localStorage.amount=JSON.stringify(context.state.amount)
     },
     sell(context,st){
       const a = context.state.wallet.filter((stock)=>stock.name==st.name)
@@ -37,6 +45,7 @@ export default createStore({
         if(stock.name==st.name)
         {
           stock.Quantity-=st.qty
+          context.state.amount+=(stock.avgPrice*st.qty)
         }
       if(stock.Quantity<=0)
       { 
@@ -44,8 +53,9 @@ export default createStore({
           return stock.name == st.name;
         }))
         context.state.wallet.splice(a,1)
-        localStorage.wallet=JSON.stringify(context.state.wallet)
        }
+       localStorage.setItem('amount', context.state.amount)
+       localStorage.setItem('wallet', JSON.stringify(context.state.wallet))
       })
    }
   },

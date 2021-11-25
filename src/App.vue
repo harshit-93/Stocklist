@@ -6,12 +6,12 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">
-            <router-link to="/">Stocks</router-link> |
+            <router-link to="/">Stocks</router-link> 
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">
-            <router-link to="/wallet">Wallet</router-link> 
+            <router-link to="/wallet">Wallet ₹[{{amount}}]</router-link> 
           </a>
         </li>
       </ul>
@@ -34,7 +34,23 @@ export default {
     components: {
       HelloWorld,
         Wallet
+    },
+    watch: {
+    amount() {
+      localStorage.setItem('amount', parseInt(this.$store.state.amount).toFixed(2))
     }
+  },
+    computed:{
+    amount(){
+      return parseInt(this.$store.state.amount)
+    }
+  },
+  mounted(){
+     if(localStorage.amount)
+     {
+       this.$store.state.amount = localStorage.amount
+     }
+  }
   }
 </script>
 

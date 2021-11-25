@@ -14,9 +14,10 @@
                  <button type="button" class="btn btn-secondary" @click="addtowallet">Add</button>
             </div>
           </div>
-            
         </section>
+        <h1>{{stock.key}}</h1>
         <p>{{ description }}</p>
+        <h3 v-if="stock.avgPrice">Price : {{stock.avgPrice}}</h3>
       
     <!-- <Chart :id="name" v-if="b" /> -->
 <div>
