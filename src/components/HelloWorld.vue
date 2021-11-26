@@ -9,10 +9,10 @@
                 </ul>
             </form>
             </div>
-            <div><input type="number" min="1" v-model="stock.Quantity"></div> 
+            <!-- <div><input type="number" min="1" v-model="stock.Quantity"></div> 
             <div>
-                 <button type="button" class="btn btn-secondary" @click="addtowallet">Add</button>
-            </div>
+                 <button type="button" class="btn btn-secondary" v-if="(stock.avgPrice*stock.Quantity)<=this.$store.state.amount" @click="addtowallet">Add</button>
+            </div> -->
           </div>
         </section>
         <h1>{{stock.key}}</h1>
@@ -32,6 +32,7 @@ import axios from 'axios';
 // import { ref } from 'vue'
 // import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import VueApexCharts from 'vue-apexcharts'
+import {mapState} from 'vuex'
 
 export default {
   name: 'HelloWorld',
@@ -47,12 +48,12 @@ export default {
       description: "",
       name: "",
       b: false,
-      stock:
-      {
-        key:'',
-        Quantity:'',
-        avgPrice: ''
-      },
+      // stock:
+      // {
+      //   key:'',
+      //   Quantity:'',
+      //   avgPrice: ''
+      // },
       options: {
         chart: {
           id: 'vuechart-example'
@@ -67,46 +68,49 @@ export default {
       }]
     }
   },
+  computed:{
+   ...mapState([
+      'stock'
+   ])
+  },
   
   methods: {
-        getSuggestion() {
+        async getSuggestion() {
           if(this.name.length>2){
-            axios.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' + this.name + '&apikey=1L0K210ONUBKP1KR')
-            .then((data) => {
-                console.log(data);
+            try {
+               let { data } = await axios.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' + this.name + '&apikey=1L0K210ONUBKP1KR')
+               console.log(data);
                 this.bestMatches = data.data['bestMatches'];
                 console.log(this.bestMatches);
-            })
-            .catch((error)=>{
-                console.log(error);
-            });
+            } catch(error) {
+              console.log(error);
+            }
             }
         },
-        getDesc(e){
-          axios.get('https://www.alphavantage.co/query?function=OVERVIEW&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
-            .then((data) => {
+        async getDesc(e){
+          try {
+          let { data } = await axios.get('https://www.alphavantage.co/query?function=OVERVIEW&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
                 console.log(data);
                 this.description = data.data['Description'];
                 console.log(this.description);
                  this.b=true
                 this.add(e);
                 this.stock.key=e
-
-            })
-            .catch((error)=>{
-                console.log(error);
-            });
+          } catch(error) {
+            console.log(error);
+          }
         },
-        add(e) {
-           axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
-           .then((data) => {
+        async add(e) {
+          try {
+           await axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
+           
               this.options.xaxis.categories = []
               //let keys=(Object.keys(data.data["Monthly Time Series"]))
               // keys.forEach(Element =>
               // {
               //   console.log(Element)
               // })
-              this.stock.key=e
+               this.stock.key=e
               this.options.xaxis.categories.push(Object.keys(data.data["Monthly Time Series"]))
               this.series[0].data = []
                for (let a of (Object.keys(data.data["Monthly Time Series"]) ))
@@ -114,13 +118,12 @@ export default {
                    this.series[0].data.push(data.data["Monthly Time Series"][a]["1. open"])
                 }
                 this.stock.avgPrice=data.data["Monthly Time Series"][Object.keys(data.data["Monthly Time Series"])[0]]["4. close"]
-            })
-            .catch((error)=>{
+          } catch(error) { 
                 console.log("API limit");
-            });
+          }
 },
      addtowallet(){
-        this.$store.dispatch('addtowallet',this.stock)
+        this.$store.dispatch('addtowallet',stock)
      }
     }
 }

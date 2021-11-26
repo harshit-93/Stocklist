@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    //stock:{},
+    stock:{},
     amount: 10000,
     wallet:[]
   },

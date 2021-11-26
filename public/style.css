@@ -179,3 +179,8 @@ input {
 }
 
 .lt-ie9 .search input { line-height: 26px }
+
+.router {
+    font-size: xx-large;
+    text-align: center;
+}

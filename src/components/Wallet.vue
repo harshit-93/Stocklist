@@ -4,6 +4,7 @@
     <tr>
       <th scope="col">Stock</th>
       <th scope="col">Quantity</th>
+      <th scope="col">AvgPrice</th>
       <th scope="col">Sell</th>
     </tr>
   </thead>
@@ -11,8 +12,9 @@
     <tr v-for="(stock,index) in wallet" v-bind:key="index">
       <td>{{stock.name}}</td>
       <td>{{stock.Quantity}}</td>
+      <td>{{stock.avgPrice}}</td>
       <td>  <input type="number" @change="mainlist" >
-        <a class="pl-5" @click="sell(stock.name)">Sell</a> </td>
+        <a class="pl-5"  @click="sell(stock.name)">Sell</a> </td>
     </tr>
   </tbody>
 </table>
