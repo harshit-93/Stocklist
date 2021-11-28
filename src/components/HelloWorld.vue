@@ -1,59 +1,45 @@
 <template>
-        <section class="main">
-          <div class="d-flex justify-content-around">
-            <div>
-              <form class="search" method="post" action="index.html" >
-                <input v-model="name" id="search" type="text" name="q" @input="getSuggestion" placeholder="Search..." autocomplete="off" />
-                <ul class="results">
-                    <li v-for="(match, index) in bestMatches" :key="index" @click="getDesc(match['1. symbol'])"> {{ match['1. symbol'] }} <br /></li>
-                </ul>
-            </form>
-            </div>
-            <!-- <div><input type="number" min="1" v-model="stock.Quantity"></div> 
-            <div>
-                 <button type="button" class="btn btn-secondary" v-if="(stock.avgPrice*stock.Quantity)<=this.$store.state.amount" @click="addtowallet">Add</button>
-            </div> -->
-          </div>
-        </section>
-        <h1>{{stock.key}}</h1>
-        <p>{{ description }}</p>
-        <h3 v-if="stock.avgPrice">Price : {{stock.avgPrice}}</h3>
-      
-    <!-- <Chart :id="name" v-if="b" /> -->
+<div class="row">
+  <div class="col-md-3 col-sm-6">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Search" @input="getsug" aria-describedby="basic-addon1" v-model="name">
+    </div>
+    <div class="list-group" v-if="dispsug">
+      <a class="list-group-item list-group-item-action" v-for="(match, index) in bestmatches"  :key="index" @click="getdesc(match['1. symbol'])">{{ match['1. symbol'] }}</a>
+    </div>
+  </div>
+  <div class="col-md-6 col-sm-0"></div>
+  <div class="col-md-3 col-sm-6">
+    <div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Quantity" aria-describedby="button-addon2" v-model="stock.Quantity">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="addtowallet">Add</button>
+</div>
+  </div>
+</div>
+
 <div>
-  <apexchart width="800" type="line" :options="options" :series="series" v-if="b"></apexchart>
+  <h1>{{stock.key}}</h1>
+  <p>{{ this.$store.state.desc }}</p>
+  <h3 v-if="stock.avgPrice">Price : {{stock.avgPrice}}</h3>
+</div>
+<div>
+  <apexchart v-if="dispgraph" width="800" type="line" :options="options" :series="series" ></apexchart>
 </div>
 </template>
-
 <script>
-/* eslint-disable eslint-disable-next-line */
-import axios from 'axios';
-// import Chart from './Chart.vue'
-// import { ref } from 'vue'
-// import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import VueApexCharts from 'vue-apexcharts'
+import axios from 'axios'
 import {mapState} from 'vuex'
-
 export default {
-  name: 'HelloWorld',
-  components: {
-      VueApexCharts
-    },
-  props: {
-   // msg: String
+  components:{
+    VueApexCharts
   },
-  data() {
-    return {
-      bestMatches: [],
-      description: "",
-      name: "",
-      b: false,
-      // stock:
-      // {
-      //   key:'',
-      //   Quantity:'',
-      //   avgPrice: ''
-      // },
+  data(){
+    return{
+      dispgraph:false,
+      dispsug:true,
+      stock:{},
+      name:"",
       options: {
         chart: {
           id: 'vuechart-example'
@@ -70,79 +56,38 @@ export default {
   },
   computed:{
    ...mapState([
-      'stock'
+      'bestmatches'
    ])
   },
-  
-  methods: {
-        async getSuggestion() {
-          if(this.name.length>2){
-            try {
-               let { data } = await axios.get('https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=' + this.name + '&apikey=1L0K210ONUBKP1KR')
-               console.log(data);
-                this.bestMatches = data.data['bestMatches'];
-                console.log(this.bestMatches);
-            } catch(error) {
-              console.log(error);
-            }
-            }
-        },
-        async getDesc(e){
-          try {
-          let { data } = await axios.get('https://www.alphavantage.co/query?function=OVERVIEW&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
-                console.log(data);
-                this.description = data.data['Description'];
-                console.log(this.description);
-                 this.b=true
-                this.add(e);
-                this.stock.key=e
-          } catch(error) {
-            console.log(error);
-          }
-        },
-        async add(e) {
-          try {
-           await axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
-           
+  methods:{
+     async add(e) {
+          let {data}=await axios.get('https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + e + '&apikey=1L0K210ONUBKP1KR')
               this.options.xaxis.categories = []
-              //let keys=(Object.keys(data.data["Monthly Time Series"]))
-              // keys.forEach(Element =>
-              // {
-              //   console.log(Element)
-              // })
-               this.stock.key=e
-              this.options.xaxis.categories.push(Object.keys(data.data["Monthly Time Series"]))
+              this.options.xaxis.categories.push(Object.keys(data["Monthly Time Series"]))
               this.series[0].data = []
-               for (let a of (Object.keys(data.data["Monthly Time Series"]) ))
+               for (let a of (Object.keys(data["Monthly Time Series"]) ))
                 {
-                   this.series[0].data.push(data.data["Monthly Time Series"][a]["1. open"])
+                   this.series[0].data.push(data["Monthly Time Series"][a]["1. open"])
                 }
-                this.stock.avgPrice=data.data["Monthly Time Series"][Object.keys(data.data["Monthly Time Series"])[0]]["4. close"]
-          } catch(error) { 
-                console.log("API limit");
-          }
+                this.stock.avgPrice=data["Monthly Time Series"][Object.keys(data["Monthly Time Series"])[0]]["4. close"]
 },
-     addtowallet(){
-        this.$store.dispatch('addtowallet',stock)
-     }
-    }
+getsug(){
+  this.dispgraph=false
+   this.dispsug=true
+  this.$store.dispatch('getSuggestion',this.name)
+  console.log(this.bestmatches,"harsht");
+},
+getdesc(e){
+  this.stock.key=e;
+  this.$store.dispatch('adddesc',this.stock)
+  this.add(e)
+   this.dispgraph=true
+   this.dispsug=false
+},
+addtowallet(){
+  this.$store.dispatch('addtowallet',this.stock)
+}
+  },
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

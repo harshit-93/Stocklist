@@ -1,4 +1,4 @@
-# real-world-vue
+# stock-list
 
 ## Project setup
 ```
