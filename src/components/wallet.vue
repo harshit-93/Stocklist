@@ -29,7 +29,7 @@ export default {
      mounted(){
      if(localStorage.wallet)
      {
-       this.$store.state.wallet = JSON.parse(localStorage.wallet)
+      this.$store.dispatch("mountwallet",localStorage.wallet)
      }
   },
   computed:{

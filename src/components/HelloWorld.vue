@@ -17,14 +17,15 @@
   </div>
 </div>
 
-<div>
+<div >
   <h1>{{stock.key}}</h1>
   <p>{{ this.$store.state.desc }}</p>
   <h3 v-if="stock.avgPrice">Price : {{stock.avgPrice}}</h3>
+  <!-- <apexchart v-if="dispgraph" width="800" type="line" :options="options" :series="series" ></apexchart> -->
 </div>
-<div>
+ <div>
   <apexchart v-if="dispgraph" width="800" type="line" :options="options" :series="series" ></apexchart>
-</div>
+</div> 
 </template>
 <script>
 import VueApexCharts from 'vue-apexcharts'
