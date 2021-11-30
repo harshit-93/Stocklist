@@ -9,6 +9,7 @@
        </a> 
     </nav>
     <router-view />
+    <!-- <login /> -->
   </div>
 </template>
 
@@ -16,11 +17,13 @@
 import HelloWorld from './components/HelloWorld.vue'
 import wallet from './components/wallet.vue'
 import {mapState} from 'vuex'
+import login from './components/login.vue'
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    wallet
+    wallet,
+    login
   },
   computed:{
    ...mapState([

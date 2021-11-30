@@ -31,6 +31,7 @@ export default createStore({
          if(stock.name == st.key) {
            stock.avgPrice = ((stock.avgPrice*stock.Quantity)+(st.Quantity*st.avgPrice))/(st.Quantity+stock.Quantity)
            stock.Quantity += st.Quantity;
+           parseInt(stock.Quantity)
            console.log("VALUE UPDATED");
            context.state.amount-=(st.avgPrice*st.Quantity)
            return true;
@@ -38,6 +39,7 @@ export default createStore({
        })
        if(updateStatus.length == 0) {
          console.log(updateStatus);
+         parseInt(st.Quantity)
          wa.push({
           name: st.key,
           Quantity: st.Quantity,

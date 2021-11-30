@@ -12,7 +12,7 @@
   <div class="col-md-3 col-sm-6">
     <div class="input-group mb-3">
   <input type="text" class="form-control" placeholder="Quantity" aria-describedby="button-addon2" v-model="stock.Quantity">
-  <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="addtowallet">Add</button>
+  <button v-if="(stock.Quantity*stock.avgPrice)<=amount" class="btn btn-outline-secondary" type="button" id="button-addon2" @click="addtowallet">Add</button>
 </div>
   </div>
 </div>
@@ -38,7 +38,11 @@ export default {
     return{
       dispgraph:false,
       dispsug:true,
-      stock:{},
+      stock:{
+        key:"",
+        Quantity:'',
+        avgPrice:0
+      },
       name:"",
       options: {
         chart: {
@@ -56,7 +60,8 @@ export default {
   },
   computed:{
    ...mapState([
-      'bestmatches'
+      'bestmatches',
+      'amount'
    ])
   },
   methods:{
@@ -85,6 +90,7 @@ getdesc(e){
    this.dispsug=false
 },
 addtowallet(){
+  //console.log();
   this.$store.dispatch('addtowallet',this.stock)
 }
   },
