@@ -1,5 +1,5 @@
 <template>
-<div class="row">
+<div class="row mr-0">
   <div class="col-md-3 col-sm-6">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Search" @input="getsug" aria-describedby="basic-addon1" v-model="name">

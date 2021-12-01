@@ -37,6 +37,7 @@ export default createStore({
           console.log('add');
           st.Quantity = parseInt(st.Quantity)
            stock.avgPrice = ((stock.avgPrice*stock.Quantity)+(st.Quantity*st.avgPrice))/(st.Quantity+stock.Quantity)
+           stock.avgPrice=stock.avgPrice.toFixed(2)
           // st.Quantity = parseInt(st.Quantity)
            stock.Quantity += st.Quantity;
            console.log("VALUE UPDATED");
@@ -49,6 +50,7 @@ export default createStore({
        if(updateStatus.length == 0) {
          console.log(updateStatus);
          st.Quantity = parseInt(st.Quantity)
+         st.avgPrice=parseFloat(st.avgPrice).toFixed(2)
          wa.push({
           name: st.key,
           Quantity: st.Quantity,

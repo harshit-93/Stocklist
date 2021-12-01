@@ -27,9 +27,9 @@ export default {
         }
     },
      mounted(){
-     if(localStorage.wallet)
+     if(localStorage.getItem("wallet"))
      {
-      this.$store.dispatch("mountwallet",localStorage.wallet)
+      this.$store.dispatch("mountwallet",localStorage.getItem("wallet"))
      }
   },
   computed:{
@@ -42,6 +42,8 @@ export default {
           this.stock.name=e
           this.stock.qty = (document.querySelector('#' + e).value == "") ? 0 : document.querySelector('#' + e).value
           this.$store.dispatch('sell',this.stock)
+          //this.stock.qty=''
+          document.querySelector('#' + e).value = ''
     }
   }
 }
