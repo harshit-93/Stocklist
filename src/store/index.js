@@ -5,9 +5,15 @@ export default createStore({
     bestmatches:[],
     desc:"",
     amount: 10000,
-    wallet:[]
+    wallet:[],
+    user:null
   },
   mutations: {
+    SET_USER_DATA(state, status) {
+      state.user = status
+      localStorage.setItem('user', JSON.stringify(status))
+      //axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
+    }
   },
   actions: {
     mountwallet(context,wa){
@@ -84,7 +90,17 @@ export default createStore({
        localStorage.setItem('amount', context.state.amount)
        localStorage.setItem('wallet', JSON.stringify(context.state.wallet))
       })
-   }
+   },
+  async login({ commit }, credentials) {
+    console.log(" LOGIN ");
+    let { data } = await axios.post('http://localhost:2020/login', credentials)
+
+    if (data.status == "present") {
+      commit('SET_USER_DATA', data.status)
+    } else {
+      return data.status;
+    }
+  }
   },
   modules: {}
 })

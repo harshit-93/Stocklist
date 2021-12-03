@@ -7,10 +7,9 @@
     <div class="container col-5">
         <br>
     <h2>Sign In</h2>
-<div>
-  <div class="form-group">
+<form @submit.prevent="login">  <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input v-model="userName" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   <div class="form-group">
@@ -22,7 +21,7 @@
     <label class="form-check-label" for="exampleCheck1">Check me out</label>
   </div>
   <button @click="checkPresent" class="btn btn-primary">Log In</button>
-</div>
+</form>
 <br><br>
 <!-- <h2>Sign Up</h2>
 <form>
@@ -47,20 +46,25 @@ export default {
  data(){
    return{
      isPresent:true,
-     userName:"",
+     email:"",
      password:""
    }
  },
- methods:{
-    checkPresent(){
-      //this.isPresent=true
-         if(this.isPresent){
-           localStorage.setItem("isPresent",this.isPresent)
-           this.$router.push({
-             name: 'Helloworld'
-          })
-         }
+ methods: {
+      async login () {
+      let status = await this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password
+        })
+
+        if(status == "not present") {
+          alert("No such user exists!")
+          this.$router.push({ name: 'login' })
+        } 
+        else {
+          this.$router.push({ name: 'Helloworld' })
+        }
     }
- }
+    }
 }
 </script>

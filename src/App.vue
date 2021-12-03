@@ -1,6 +1,6 @@
 <template>
    <div id="app">
-      <nav v-if="islogin" class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav v-if="user=='present'" class="navbar navbar-expand-lg navbar-light bg-light">
        <a class="btn">
          <router-link to="/">Stocks</router-link>
        </a> 
@@ -27,7 +27,8 @@ export default {
   },
   computed:{
    ...mapState([
-      'amount'
+      'amount',
+      'user'
    ])
   },
   data(){
@@ -37,12 +38,12 @@ export default {
   },
   mounted() {
     this.$store.state.amount = localStorage.getItem('amount') ? JSON.parse(localStorage.getItem('amount')) : this.amount
-    if((localStorage.getItem('islogin') != 'true') || (localStorage.getItem('islogin') == '')) {
+    if(localStorage.getItem('user') == null) {
       this.$router.push({
         name: 'login'
       })
     }
-    this.islogin=localStorage.getItem("isPresent")
+   // this.islogin=localStorage.getItem("isPresent")
   },
   // beforeRouteEnter(routeTo, routeFrom, next) {
   //   console.log("jhgfd");
