@@ -41,7 +41,36 @@ app.post('/login', (req, res) => {
         })
     }
 })
+app.post('/signup', (req, res) => {
+    if (req.body) {
+        const user = {
+            email: req.body.email,
+            password: req.body.password
+        }
 
+        const data = JSON.stringify(user, null, 2)
+        var dbUserEmail = require('./db/user.json').email
+
+        if (dbUserEmail === req.body.email) {
+            res.sendStatus(400)
+        } else {
+            fs.writeFile('./db/user.json', data, err => {
+                if (err) {
+                    console.log(err + data)
+                } else {
+                    const token = jwt.sign({ user }, SECRET_KEY)
+                    res.json({
+                        token,
+                        email: user.email,
+                        name: user.name
+                    })
+                }
+            })
+        }
+    } else {
+        res.sendStatus(400)
+    }
+})
 function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization']
 

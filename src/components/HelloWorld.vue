@@ -16,7 +16,7 @@
 </div>
   </div>
 </div>
-
+<div class="container col-11">
 <div >
   <h1>{{stock.key}}</h1>
   <p>{{ this.$store.state.desc }}</p>
@@ -26,6 +26,7 @@
  <div>
   <apexchart v-if="dispgraph" width="800" type="line" :options="options" :series="series" ></apexchart>
 </div> 
+</div>
 </template>
 <script>
 import VueApexCharts from 'vue-apexcharts'

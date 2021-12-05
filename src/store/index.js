@@ -100,7 +100,13 @@ export default createStore({
     } else {
       return data.status;
     }
-  }
+  },
+  async signup({ commit }, credentials) {
+     await axios.post('http://localhost:2020/signup', credentials)
+      .then(({ data }) => {
+        commit('SET_USER_DATA', data.token)
+      })
+  },
   },
   modules: {}
 })
