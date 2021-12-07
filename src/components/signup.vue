@@ -1,4 +1,9 @@
 <template>
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center">
+       <h1>
+         Stocks
+       </h1> 
+    </nav>
 <div class="container col-5">
     <h2>Sign Up</h2>
 <form @submit.prevent="login">

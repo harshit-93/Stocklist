@@ -16,10 +16,6 @@
     <label for="exampleInputPassword1">Password</label>
     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
   </div>
-  <div class="form-group form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
   <button @click="login" class="btn btn-primary">Log In</button>
   <!-- <a href="">Don't have an account SignUp</a> -->
 </form>

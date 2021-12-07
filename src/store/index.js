@@ -6,7 +6,7 @@ export default createStore({
     desc:"",
     amount: 10000,
     wallet:[],
-    user:null
+    user:"no"
   },
   mutations: {
     SET_USER_DATA(state, status) {
@@ -93,7 +93,7 @@ export default createStore({
    },
   async login({ commit }, credentials) {
     console.log(" LOGIN ");
-    let { data } = await axios.post('http://localhost:2020/login', credentials)
+    let { data } = await axios.post('https://d8bc-2409-4053-e1e-e271-2d79-4208-c601-b945.ngrok.io/login', credentials)
 
     if (data.status == "present") {
       commit('SET_USER_DATA', data.status)
@@ -102,7 +102,7 @@ export default createStore({
     }
   },
   async signup({ commit }, credentials) {
-     await axios.post('http://localhost:2020/signup', credentials)
+     await axios.post('https://d8bc-2409-4053-e1e-e271-2d79-4208-c601-b945.ngrok.io/signup', credentials)
       .then(({ data }) => {
         commit('SET_USER_DATA', data.token)
       })

@@ -60,9 +60,12 @@ app.post('/signup', (req, res) => {
                 } else {
                     const token = jwt.sign({ user }, SECRET_KEY)
                     res.json({
+                        token:{
                         token,
                         email: user.email,
                         name: user.name
+                    },
+                    status:"present"
                     })
                 }
             })
@@ -71,18 +74,18 @@ app.post('/signup', (req, res) => {
         res.sendStatus(400)
     }
 })
-function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization']
+// function verifyToken(req, res, next) {
+//     const bearerHeader = req.headers['authorization']
 
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ')
-        const bearerToken = bearer[1]
-        req.token = bearerToken
-        next()
-    } else {
-        res.sendStatus(401)
-    }
-}
+//     if (typeof bearerHeader !== 'undefined') {
+//         const bearer = bearerHeader.split(' ')
+//         const bearerToken = bearer[1]
+//         req.token = bearerToken
+//         next()
+//     } else {
+//         res.sendStatus(401)
+//     }
+// }
 
 app.listen(PORT, () => {
     console.log(`Server started on PORT ${PORT}`)
