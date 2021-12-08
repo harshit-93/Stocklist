@@ -38,7 +38,6 @@ export default {
           email: this.email,
           password: this.password
         })
-
         if(status == "not present") {
           alert("No such user exists!")
           this.$router.push({ name: 'signup' })

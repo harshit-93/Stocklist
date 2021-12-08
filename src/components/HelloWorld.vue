@@ -11,7 +11,7 @@
   <div class="col-md-6 col-sm-0"></div>
   <div class="col-md-3 col-sm-6">
     <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Quantity" aria-describedby="button-addon2" v-model="stock.Quantity">
+  <input type="number" class="form-control" placeholder="Quantity" aria-describedby="button-addon2" v-model="stock.Quantity">
   <button v-if="(stock.Quantity*stock.avgPrice)<=amount" class="btn btn-outline-secondary" type="button" id="button-addon2" @click="addtowallet">Add</button>
 </div>
   </div>

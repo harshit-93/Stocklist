@@ -44,7 +44,6 @@ export default {
           email: this.email,
           password: this.password
         })
-
         if(this.user){
           this.$router.push({ name: 'Helloworld' })
         }

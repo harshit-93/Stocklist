@@ -1,4 +1,8 @@
 {
-  "email": "sharmaharshit12@gmail.com",
-  "password": "1234"
+  "users": [
+    {
+      "email": "sharmaharshit0912@gmail.com",
+      "password": "123456"
+    }
+  ]
 }

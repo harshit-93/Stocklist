@@ -16,22 +16,18 @@ app.use(cors({
     origin: '*'
 }
 ));
-
-
 app.post('/login', (req, res) => {
     const userDB = fs.readFileSync('./db/user.json')
     const userInfo = JSON.parse(userDB)
     if (
         req.body &&
-        req.body.email === userInfo.email &&
-        req.body.password === userInfo.password
+        userInfo.users.filter((user) => { return ((user.email == req.body.email) && (user.password == req.body.password)) }).length
     ) {
         const token = jwt.sign({ userInfo }, SECRET_KEY)
         res.json({
             token: {
                 token,
-                email: userInfo.email,
-                name: userInfo.name
+                email: userInfo.email
             },
             status: "present"
         })
@@ -47,46 +43,35 @@ app.post('/signup', (req, res) => {
             email: req.body.email,
             password: req.body.password
         }
-
-        const data = JSON.stringify(user, null, 2)
-        var dbUserEmail = require('./db/user.json').email
-
-        if (dbUserEmail === req.body.email) {
-            res.sendStatus(400)
+        let data = JSON.stringify(fs.readFileSync("./db/user.json"))
+        if (data.users.filter((user) => { return user.email == req.body.email }).length) {
+            res.json({
+                status: "not present"
+            })
         } else {
+            data.users.push(user)
+            data = JSON.stringify(data, null, 2)
             fs.writeFile('./db/user.json', data, err => {
                 if (err) {
                     console.log(err + data)
                 } else {
                     const token = jwt.sign({ user }, SECRET_KEY)
                     res.json({
-                        token:{
-                        token,
-                        email: user.email,
-                        name: user.name
-                    },
-                    status:"present"
+                        token: {
+                            token,
+                            email: user.email
+                        },
+                        status: "present"
                     })
                 }
             })
         }
     } else {
-        res.sendStatus(400)
+        res.json({
+            status: "present"
+        })
     }
 })
-// function verifyToken(req, res, next) {
-//     const bearerHeader = req.headers['authorization']
-
-//     if (typeof bearerHeader !== 'undefined') {
-//         const bearer = bearerHeader.split(' ')
-//         const bearerToken = bearer[1]
-//         req.token = bearerToken
-//         next()
-//     } else {
-//         res.sendStatus(401)
-//     }
-// }
-
 app.listen(PORT, () => {
     console.log(`Server started on PORT ${PORT}`)
 })
