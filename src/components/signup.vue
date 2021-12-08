@@ -17,6 +17,11 @@
     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
   </div>
   <button @click="signup" class="btn btn-primary">Sign Up</button>
+  <br>
+  <br>
+  <a>
+       <router-link to="/login">Already have an account? Signin</router-link>
+  </a> 
 </form> 
 </div>
 <br>
@@ -44,9 +49,15 @@ export default {
           email: this.email,
           password: this.password
         })
-        if(this.user){
-          this.$router.push({ name: 'Helloworld' })
+        if(this.user=="already present"){
+          alert("User already exists ! Signin")
         }
+        else if(this.user=="invalid")
+         alert("Invalid email or password !")
+         else
+         { console.log(this.user);
+           this.$router.push({ name: 'Helloworld' })
+         }
     }
     }
 }

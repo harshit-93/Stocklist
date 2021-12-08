@@ -38,15 +38,19 @@ app.post('/login', (req, res) => {
     }
 })
 app.post('/signup', (req, res) => {
+    if(req.body.email==null||req.body.password==null)
+     res.json({
+         status:"invalid"
+     })
     if (req.body) {
         const user = {
             email: req.body.email,
             password: req.body.password
         }
-        let data = JSON.stringify(fs.readFileSync("./db/user.json"))
+        let data = JSON.parse(fs.readFileSync("./db/user.json"))
         if (data.users.filter((user) => { return user.email == req.body.email }).length) {
             res.json({
-                status: "not present"
+                status: "already present"
             })
         } else {
             data.users.push(user)
@@ -68,7 +72,7 @@ app.post('/signup', (req, res) => {
         }
     } else {
         res.json({
-            status: "present"
+            status: "inavlid"
         })
     }
 })

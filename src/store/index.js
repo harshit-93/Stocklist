@@ -93,7 +93,7 @@ export default createStore({
    },
   async login({ commit }, credentials) {
     console.log(" LOGIN ");
-    let { data } = await axios.post('https://2281-117-240-176-98.ngrok.io/login', credentials)
+    let { data } = await axios.post('https://66b9-2409-4053-e1e-e271-4844-48cd-abb4-f155.ngrok.io/login', credentials)
     if (data.status == "present") {
       commit('SET_USER_DATA', data.status)
     } else {
@@ -102,10 +102,9 @@ export default createStore({
   },
   async signup({ commit }, credentials) {
     console.log("signup");
-     let { data } = await axios.post('https://2281-117-240-176-98.ngrok.io/signup', credentials)
-      if(data.status=="present")
+     let { data } = await axios.post('https://66b9-2409-4053-e1e-e271-4844-48cd-abb4-f155.ngrok.io/signup', credentials)
+     console.log(data.status);
         commit('SET_USER_DATA',data.status)
-      else
         return data.status
   },
   },

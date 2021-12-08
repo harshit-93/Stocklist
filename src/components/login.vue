@@ -16,8 +16,12 @@
     <label for="exampleInputPassword1">Password</label>
     <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
   </div>
-  <button @click="login" class="btn btn-primary">Log In</button>
-  <!-- <a href="">Don't have an account SignUp</a> -->
+  <button @click="signin" class="btn btn-primary">Log In</button>
+  <br>
+  <br>
+  <a>
+       <router-link to="/signup">Don't have an account? Signup</router-link>
+       </a> 
 </form>
 <br><br>
 </div>
@@ -33,14 +37,13 @@ export default {
    }
  },
  methods: {
-      async login () {
+      async signin () {
       let status = await this.$store.dispatch('login', {
           email: this.email,
           password: this.password
         })
         if(status == "not present") {
-          alert("No such user exists!")
-          this.$router.push({ name: 'signup' })
+          alert("Invalid email or password")
         } 
         else {
           this.$router.push({ name: 'Helloworld' })
