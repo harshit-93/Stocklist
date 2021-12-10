@@ -1,6 +1,6 @@
 <template>
    <div id="app">
-      <nav v-if="islogin" class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav v-if="user" class="navbar navbar-expand-lg navbar-light bg-light">
        <a class="btn">
          <router-link to="/">Stocks</router-link>
        </a> 
@@ -30,9 +30,6 @@ export default {
       'amount',
       'user'
    ]),
-   islogin(){
-     return localStorage.getItem('user')
-   }
   },
   mounted() {
     this.$store.state.amount = localStorage.getItem('amount') ? JSON.parse(localStorage.getItem('amount')) : this.amount
@@ -41,12 +38,9 @@ export default {
         name: 'login'
       })
     }
-   // this.islogin=localStorage.getItem("isPresent")
+    else
+      this.$store.state.user=localStorage.getItem('user')
   },
-  // beforeRouteEnter(routeTo, routeFrom, next) {
-  //   console.log("jhgfd");
-  //   next('login');
-  // },
 }
 </script>
 

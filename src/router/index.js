@@ -3,6 +3,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import wallet from '@/components/wallet.vue'
 import login from '@/components/login.vue'
 import signup from '@/components/signup.vue'
+//mport main from '@/App.vue'
 const routes = [
   {
     path: '/',

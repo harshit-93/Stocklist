@@ -6,17 +6,17 @@
     </nav>
 <div class="container col-5">
     <h2>Sign Up</h2>
-<form @submit.prevent="login">
+<form @submit.prevent="register">
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <input v-model="email" type="email" required class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Password</label>
-    <input v-model="password" type="password" class="form-control" id="exampleInputPassword1">
+    <input v-model="password" type="password" required class="form-control" id="exampleInputPassword1">
   </div>
-  <button @click="signup" class="btn btn-primary">Sign Up</button>
+  <button class="btn btn-primary">Sign Up</button>
   <br>
   <br>
   <a>
@@ -44,18 +44,19 @@ export default {
    ])
   },
     methods:{
-      async signup () {
-       await this.$store.dispatch('signup', {
+      async register () {
+      let data = await this.$store.dispatch('signup', {
           email: this.email,
           password: this.password
         })
-        if(this.user=="already present"){
+        if(data =="already present"){
           alert("User already exists ! Signin")
         }
-        else if(this.user=="invalid")
+       if(data =="invalid")
          alert("Invalid email or password !")
-         else
-         { console.log(this.user);
+         console.log(this.user);
+        if(this.user)
+         {
            this.$router.push({ name: 'Helloworld' })
          }
     }

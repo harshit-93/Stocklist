@@ -38,21 +38,20 @@ app.post('/login', (req, res) => {
     }
 })
 app.post('/signup', (req, res) => {
-    if(req.body.email==null||req.body.password==null)
-     res.json({
-         status:"invalid"
-     })
-    if (req.body) {
+    console.log(req.body);
+    if (req.body.email!=""||req.body.password!="") {
         const user = {
             email: req.body.email,
             password: req.body.password
         }
+        console.log(user)
         let data = JSON.parse(fs.readFileSync("./db/user.json"))
         if (data.users.filter((user) => { return user.email == req.body.email }).length) {
             res.json({
                 status: "already present"
             })
-        } else {
+        } 
+        else {
             data.users.push(user)
             data = JSON.stringify(data, null, 2)
             fs.writeFile('./db/user.json', data, err => {
@@ -70,9 +69,10 @@ app.post('/signup', (req, res) => {
                 }
             })
         }
-    } else {
+    } 
+    else {
         res.json({
-            status: "inavlid"
+            status: "invalid"
         })
     }
 })

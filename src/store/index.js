@@ -6,13 +6,12 @@ export default createStore({
     desc:"",
     amount: 10000,
     wallet:[],
-    user:"no"
+    user:""
   },
   mutations: {
-    SET_USER_DATA(state, status) {
-      state.user = status
-      localStorage.setItem('user', JSON.stringify(status))
-      //axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
+    SET_USER_DATA(state, token) {
+      state.user = token
+      localStorage.setItem('user', JSON.stringify(token))
     }
   },
   actions: {
@@ -93,18 +92,18 @@ export default createStore({
    },
   async login({ commit }, credentials) {
     console.log(" LOGIN ");
-    let { data } = await axios.post('https://66b9-2409-4053-e1e-e271-4844-48cd-abb4-f155.ngrok.io/login', credentials)
-    if (data.status == "present") {
-      commit('SET_USER_DATA', data.status)
-    } else {
-      return data.status;
+    let { data } = await axios.post('https://6ee9-2409-4053-e1e-e271-4d36-c4ed-9d3c-b5c4.ngrok.io/login', credentials)
+    if (data.token) {
+      commit('SET_USER_DATA', data.token) 
     }
+    return data.status
   },
   async signup({ commit }, credentials) {
     console.log("signup");
-     let { data } = await axios.post('https://66b9-2409-4053-e1e-e271-4844-48cd-abb4-f155.ngrok.io/signup', credentials)
+     let { data } = await axios.post('https://6ee9-2409-4053-e1e-e271-4d36-c4ed-9d3c-b5c4.ngrok.io/signup', credentials)
      console.log(data.status);
-        commit('SET_USER_DATA',data.status)
+     if(data.token)
+        commit('SET_USER_DATA',data.token)
         return data.status
   },
   },
