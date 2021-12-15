@@ -6,10 +6,10 @@
        </a> 
        <a class="btn">
        <router-link to="/wallet">Wallet ₹{{amount}}</router-link>
-       </a> 
+       </a>
+       <a class="btn" @click="logOut"> Logout </a>  
     </nav>
     <router-view /> 
-     <!-- <login />  -->
   </div>
 </template>
 
@@ -31,16 +31,32 @@ export default {
       'user'
    ]),
   },
+  data(){
+    return{
+      islogin : ''
+    }
+  },
   mounted() {
     this.$store.state.amount = localStorage.getItem('amount') ? JSON.parse(localStorage.getItem('amount')) : this.amount
-    if(localStorage.getItem('user') == null) {
+    if(!localStorage.getItem('user')||localStorage.getItem('user')=='') {
       this.$router.push({
         name: 'login'
       })
     }
-    else
+    else{
       this.$store.state.user=localStorage.getItem('user')
+      }
   },
+  methods:{
+    logOut(){
+         if(localStorage.getItem('user'))
+         { 
+           localStorage.setItem('user','')     
+           this.$store.state.user=localStorage.getItem('user')
+           this.$router.push({ name: 'login' })
+         }
+    }
+  }
 }
 </script>
 

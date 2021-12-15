@@ -3,6 +3,18 @@
     {
       "email": "sharmaharshit0912@gmail.com",
       "password": "123456"
+    },
+    {
+      "email": "abc@gmail.com",
+      "password": "12345"
+    },
+    {
+      "email": "abcd@gmail.com",
+      "password": "12345"
+    },
+    {
+      "email": "karan@mall91.com",
+      "password": "1234567"
     }
   ]
 }
